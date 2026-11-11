@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08111f">
+  <meta name="robots" content="noindex,nofollow">
+  <title>NetForge V2 管理中心</title>
+  <link rel="stylesheet" href="admin-v2.css?v=2.4.0">
+  <link rel="stylesheet" href="ui-system.css?v=2.4.0">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <section id="loginView" class="login-view">
+    <form id="loginForm" class="login-card">
+      <a class="brand" href="/"><span>N</span><strong>NetForge</strong></a>
+      <button class="icon-button login-theme" type="button" data-theme-toggle aria-label="切换至浅色主题"><svg class="icon-svg icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg><svg class="icon-svg icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 15.2A8.5 8.5 0 0 1 8.8 3.6 8.5 8.5 0 1 0 20.4 15.2Z"/></svg></button>
+      <p class="eyebrow">V2 ADMIN CONSOLE</p>
+      <h1>管理中心</h1>
+      <p class="muted">登录后按角色加载授权模块。所有敏感操作仍由服务端逐项鉴权。</p>
+      <label>管理员账号<input name="username" autocomplete="username" required></label>
+      <label>管理员密码<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="primary full" type="submit">登录管理中心</button>
+      <p id="loginError" class="error" role="alert"></p>
+      <a class="back-link" href="/">← 返回学习平台</a>
+    </form>
+  </section>
+
+  <div id="adminApp" class="app-shell hidden">
+    <aside class="sidebar">
+      <a class="brand sidebar-brand" href="/"><span>N</span><strong>NetForge <small>V2</small></strong></a>
+      <nav id="mainNav" aria-label="管理模块">
+        <button class="nav-item active" data-view="dashboard" data-permission="dashboard"><i>01</i>数据控制台</button>
+        <button class="nav-item" data-view="questions" data-permission="questions"><i>02</i>题库管理</button>
+        <button class="nav-item" data-view="exams" data-permission="exams"><i>03</i>试卷管理</button>
+        <button class="nav-item" data-view="users" data-permission="users"><i>04</i>用户与注册码</button>
+        <button class="nav-item" data-view="content" data-permission="content"><i>05</i>内容与反馈</button>
+        <button class="nav-item" data-view="permissions" data-permission="permissions"><i>06</i>权限管理</button>
+        <button class="nav-item" data-view="system" data-permission="system"><i>07</i>系统与审计</button>
+      </nav>
+      <div class="sidebar-foot">
+        <span id="adminIdentity">—</span><small id="adminRole">—</small>
+        <button id="logoutBtn" class="text-button">退出登录</button>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <button id="menuBtn" class="icon-button" aria-label="打开导航"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <div><p class="eyebrow" id="viewKicker">OVERVIEW</p><h1 id="viewTitle">数据控制台</h1></div>
+        <div class="topbar-actions"><span id="updatedAt" class="muted"></span><button class="icon-button" type="button" data-theme-toggle aria-label="切换至浅色主题"><svg class="icon-svg icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg><svg class="icon-svg icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 15.2A8.5 8.5 0 0 1 8.8 3.6 8.5 8.5 0 1 0 20.4 15.2Z"/></svg></button><button id="refreshBtn" class="ghost">刷新</button></div>
+      </header>
+
+      <main>
+        <section id="view-dashboard" class="view active" data-title="数据控制台" data-kicker="OVERVIEW">
+          <div id="dashboardMetrics" class="metric-grid" aria-live="polite"></div>
+          <div class="two-column">
+            <article class="panel"><div class="panel-head"><div><p class="eyebrow">ACTIVITY</p><h2>近 14 日活跃与答题</h2></div><button id="exportDashboardBtn" class="ghost small">导出 CSV</button></div><div id="dailyTrend" class="trend-list empty-slot"></div></article>
+            <article class="panel"><div class="panel-head"><div><p class="eyebrow">QUALITY</p><h2>知识点正确率</h2></div></div><div id="topicQuality" class="bar-list empty-slot"></div></article>
+          </div>
+          <article class="panel"><div class="panel-head"><div><p class="eyebrow">ATTENTION</p><h2>频繁错题与待处理项</h2></div><span class="caption">仅作人工复核线索</span></div><div id="riskSignals" class="table-wrap empty-slot"></div></article>
+        </section>
+
+        <section id="view-questions" class="view" data-title="题库管理" data-kicker="QUESTION BANK">
+          <div class="toolbar">
+            <div class="filters"><input id="questionSearch" type="search" placeholder="搜索题干、ID、知识点"><select id="questionStatus"><option value="">全部状态</option><option value="published">已发布</option><option value="draft">草稿</option><option value="archived">已下架</option></select></div>
+            <div class="toolbar-actions"><button id="openImportBtn" class="ghost">Excel 导入预检</button><button id="newQuestionBtn" class="primary">新增题目</button></div>
+          </div>
+          <article class="panel"><div id="questionTable" class="table-wrap empty-slot"></div><div id="questionPager" class="pager"></div></article>
+          <aside id="questionEditor" class="drawer hidden" aria-labelledby="questionEditorTitle">
+            <form id="questionForm">
+              <div class="drawer-head"><div><p class="eyebrow">EDITOR</p><h2 id="questionEditorTitle">新增题目</h2></div><button class="icon-button" type="button" data-close="questionEditor" aria-label="关闭">×</button></div>
+              <input name="id" type="hidden">
+              <div class="form-grid"><label class="wide">题干<textarea name="question" rows="4" required></textarea></label><label>题型<select name="type" required><option value="single">单选</option><option value="multiple">多选</option><option value="judge">判断</option></select></label><label>状态<select name="status"><option value="draft">草稿</option><option value="published">发布</option><option value="archived">下架</option></select></label><label>知识点<input name="topic" required></label><label>难度<select name="difficulty"><option value="easy">简单</option><option value="medium">中等</option><option value="hard">困难</option></select></label><label class="wide">选项（每行“键|内容”）<textarea name="options" rows="6" required></textarea></label><label>正确答案（逗号分隔）<input name="answer" required></label><label>来源<input name="source"></label><label class="wide">解析<textarea name="explanation" rows="5" required></textarea></label><label class="wide">校订参考（每行一个 HTTPS 链接）<textarea name="references" rows="4"></textarea></label></div>
+              <div class="form-actions"><button type="button" class="ghost" id="previewQuestionBtn">预览</button><button type="submit" class="primary">保存题目</button></div>
+            </form>
+          </aside>
+          <aside id="importDrawer" class="drawer hidden" aria-labelledby="importTitle">
+            <form id="importForm"><div class="drawer-head"><div><p class="eyebrow">VALIDATE FIRST</p><h2 id="importTitle">Excel 导入预检</h2></div><button class="icon-button" type="button" data-close="importDrawer" aria-label="关闭">×</button></div><p class="notice">文件仅进入预检；确认提交前不会写入题库。失败批次不得产生半批数据。</p><label>选择 .xlsx 文件<input id="importFile" name="file" type="file" accept=".xlsx" required></label><button class="primary" type="submit">开始预检</button></form>
+            <div id="importPreview" class="import-preview empty-slot"></div>
+          </aside>
+          <aside id="revisionDrawer" class="drawer hidden" aria-labelledby="revisionTitle"><div class="drawer-head"><div><p class="eyebrow">REVISION HISTORY</p><h2 id="revisionTitle">题目版本</h2></div><button class="icon-button" type="button" data-close="revisionDrawer" aria-label="关闭">×</button></div><div id="revisionList" class="import-preview empty-slot"></div></aside>
+        </section>
+
+        <section id="view-exams" class="view" data-title="试卷管理" data-kicker="EXAM PAPERS">
+          <div class="toolbar"><div class="filters"><input id="examSearch" type="search" placeholder="搜索试卷名称"></div><button id="newExamBtn" class="primary">新建试卷</button></div>
+          <article class="panel"><div id="examTable" class="table-wrap empty-slot"></div></article>
+          <aside id="examEditor" class="drawer hidden" aria-labelledby="examEditorTitle"><form id="examForm"><div class="drawer-head"><div><p class="eyebrow">PAPER BUILDER</p><h2 id="examEditorTitle">新建试卷</h2></div><button class="icon-button" type="button" data-close="examEditor" aria-label="关闭">×</button></div><div class="form-grid"><label class="wide">试卷名称<input name="title" required></label><label>时长（分钟）<input name="durationMinutes" type="number" min="1" required></label><label>及格线（%）<input name="passPercent" type="number" min="0" max="100" required></label><label>题量<input name="questionCount" type="number" min="1" required></label><label>状态<select name="status"><option value="draft">草稿</option><option value="published">发布</option></select></label><label class="wide">组卷规则（JSON）<textarea name="rules" rows="7" placeholder='{"topic":"WLAN","types":{"single":20}}'></textarea></label></div><p class="notice">考试开始后必须固化题目、答案、分值和判分规则快照。</p><div class="form-actions"><button class="primary" type="submit">保存试卷</button></div></form></aside>
+        </section>
+
+        <section id="view-users" class="view" data-title="用户与注册码" data-kicker="MEMBERS">
+          <div class="subtabs"><button class="active" data-subview="userList">用户管理</button><button data-subview="codeList">注册码</button></div>
+          <div id="userList" class="subview active"><div class="toolbar"><div class="filters"><input id="userSearch" type="search" placeholder="搜索账号或昵称"><select id="userStatus"><option value="">全部状态</option><option value="active">正常</option><option value="disabled">已禁用</option><option value="deleted">已软删除</option></select></div><button id="exportUsersBtn" class="ghost">导出当前页 CSV</button></div><article class="panel"><div id="userTable" class="table-wrap empty-slot"></div><div id="userPager" class="pager"></div></article><div id="resetTokenResult" class="secret-result hidden" role="status"></div></div>
+          <div id="codeList" class="subview"><div class="toolbar"><p class="muted">注册码支持有效期、最大使用次数和撤销。</p><button id="newCodeBtn" class="primary">创建注册码</button></div><article class="panel"><div id="codeTable" class="table-wrap empty-slot"></div></article></div>
+          <aside id="codeEditor" class="drawer hidden" aria-labelledby="codeTitle"><form id="codeForm"><div class="drawer-head"><div><p class="eyebrow">REGISTRATION</p><h2 id="codeTitle">创建注册码</h2></div><button class="icon-button" type="button" data-close="codeEditor" aria-label="关闭">×</button></div><label>备注<input name="label" maxlength="80"></label><label>最大使用次数<input name="maxUses" type="number" min="1"></label><label>失效时间<input name="expiresAt" type="datetime-local"></label><div class="form-actions"><button class="primary" type="submit">创建</button></div></form></aside>
+        </section>
+
+        <section id="view-content" class="view" data-title="内容与反馈" data-kicker="CONTENT">
+          <div class="subtabs"><button class="active" data-subview="contentList">公告与文章</button><button data-subview="feedbackList">纠错工单</button></div>
+          <div id="contentList" class="subview active"><div class="toolbar"><div class="filters"><select id="contentType"><option value="">全部内容</option><option value="announcement">公告</option><option value="article">备考攻略</option><option value="changelog">更新日志</option></select></div><button id="newContentBtn" class="primary">新建内容</button></div><article class="panel"><div id="contentTable" class="table-wrap empty-slot"></div></article></div>
+          <div id="feedbackList" class="subview"><div class="toolbar"><div class="filters"><select id="feedbackStatus"><option value="">全部状态</option><option value="open">待处理</option><option value="processing">处理中</option><option value="resolved">已解决</option><option value="closed">已关闭</option></select></div></div><article class="panel"><div id="feedbackTable" class="table-wrap empty-slot"></div></article></div>
+          <aside id="contentEditor" class="drawer hidden" aria-labelledby="contentTitle"><form id="contentForm"><div class="drawer-head"><div><p class="eyebrow">EDITOR</p><h2 id="contentTitle">新建内容</h2></div><button class="icon-button" type="button" data-close="contentEditor" aria-label="关闭">×</button></div><div class="form-grid"><label>类型<select name="type"><option value="announcement">公告</option><option value="article">备考攻略</option><option value="changelog">更新日志</option></select></label><label>状态<select name="status"><option value="draft">草稿</option><option value="published">发布</option><option value="archived">下架</option></select></label><label class="wide">标题<input name="title" required></label><label class="wide">来源<input name="source" placeholder="可选"></label><label class="wide">正文（纯文本/受控 Markdown）<textarea name="body" rows="12" required></textarea></label></div><div class="form-actions"><button class="primary" type="submit">保存内容</button></div></form></aside>
+        </section>
+
+        <section id="view-permissions" class="view" data-title="权限管理" data-kicker="ACCESS CONTROL">
+          <article class="panel"><div class="panel-head"><div><p class="eyebrow">RBAC</p><h2>三角色权限边界</h2></div><span class="caption">前端隐藏不代替后端鉴权</span></div><div id="roleMatrix" class="role-grid"></div></article>
+          <article class="panel"><div class="panel-head"><h2>管理员账号</h2><button id="newAdminBtn" class="primary">新建管理员</button></div><div id="adminTable" class="table-wrap empty-slot"></div><p class="notice">角色与状态变更均需二次确认；服务端会保护最后一位可用超级管理员。</p></article>
+          <aside id="adminEditor" class="drawer hidden" aria-labelledby="adminEditorTitle"><form id="adminForm"><div class="drawer-head"><h2 id="adminEditorTitle">新建管理员</h2><button class="icon-button" type="button" data-close="adminEditor" aria-label="关闭">×</button></div><div class="form-grid"><label>账号<input name="username" minlength="3" maxlength="24" required></label><label>显示名称<input name="displayName" maxlength="30" required></label><label>初始密码<input name="password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required></label><label>角色<select name="role"><option value="support_admin">普通管理员</option><option value="question_admin">题库管理员</option><option value="super_admin">超级管理员</option></select></label></div><div class="form-actions"><button class="primary" type="submit">创建</button></div></form></aside>
+        </section>
+
+        <section id="view-system" class="view" data-title="系统与审计" data-kicker="SYSTEM">
+          <div class="two-column"><article class="panel"><div class="panel-head"><div><p class="eyebrow">BACKUP</p><h2>数据备份</h2></div><button id="createBackupBtn" class="primary">创建备份</button></div><div id="backupList" class="empty-slot"></div><p class="notice warning">恢复不在网页中直接执行。必须由超级管理员发起独立审批，恢复前再次备份，并在隔离环境验证。</p></article><article class="panel"><p class="eyebrow">SERVICE</p><h2>服务状态</h2><div id="serviceStatus" class="empty-slot"></div></article></div>
+          <article class="panel"><div class="panel-head"><div><p class="eyebrow">AUDIT</p><h2>操作审计</h2></div><div class="filters"><input id="auditSearch" type="search" placeholder="操作人、目标或请求ID"></div></div><div id="auditTable" class="table-wrap empty-slot"></div><div id="auditPager" class="pager"></div></article>
+        </section>
+      </main>
+    </div>
+  </div>
+  <div id="overlay" class="overlay hidden"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <aside id="adminPersonal" class="drawer hidden" aria-labelledby="adminPersonalTitle"><div class="drawer-head"><h2 id="adminPersonalTitle">个人中心</h2><button class="icon-button" type="button" data-close aria-label="关闭个人中心">×</button></div><p id="adminPersonalIdentity"></p><form data-appearance></form></aside>
+  <aside id="userDetailDrawer" class="drawer hidden" aria-labelledby="userDetailTitle"><div class="drawer-head"><h2 id="userDetailTitle">用户详情</h2><button class="icon-button" type="button" data-close aria-label="关闭用户详情">×</button></div><div id="userDetailBody"></div><div class="actions"><button id="userDetailPrev" class="secondary" type="button">上一页记录</button><button id="userDetailNext" class="secondary" type="button">下一页记录</button><button id="userPortraitBtn" class="primary" type="button">生成 AI 学习画像</button></div><p class="muted">画像将学习统计及近期记录发送至 DeepSeek，不发送密码、令牌或注册码。</p><div id="userPortraitBody" class="document-body" role="status" aria-live="polite"></div></aside>
+  <script src="appearance.js?v=2.4.0"></script>
+  <script src="document-render.js?v=2.4.0"></script>
+  <script src="admin-v2.js?v=2.4.0"></script>
+</body>
+</html>

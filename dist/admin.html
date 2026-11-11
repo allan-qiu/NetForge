@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="robots" content="noindex,nofollow">
+  <title>NetForge 管理后台</title>
+  <link rel="stylesheet" href="admin.css?v=3.1">
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <section id="loginView" class="login-view">
+    <form id="loginForm" class="login-card">
+      <a class="brand" href="/"><span>N</span><strong>NetForge</strong></a>
+      <p class="eyebrow">ADMIN CONSOLE</p>
+      <h1>管理后台</h1>
+      <p class="muted">查看团队学习情况并管理账号。</p>
+      <label>管理员账号<input name="username" value="admin" autocomplete="username" required></label>
+      <label>管理员密码<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="primary" type="submit">安全登录</button>
+      <p id="loginError" class="error" role="alert"></p>
+      <a class="back-link" href="/">← 返回练题站</a>
+    </form>
+  </section>
+
+  <div id="adminView" class="admin-view hidden">
+    <header>
+      <a class="brand" href="/"><span>N</span><strong>NetForge</strong><small>管理后台</small></a>
+      <div class="header-actions"><button id="refreshBtn" class="ghost">刷新数据</button><button id="logoutBtn" class="ghost">退出</button></div>
+    </header>
+    <main>
+      <div class="page-heading"><div><p class="eyebrow">TEAM OVERVIEW</p><h1>学习数据总览</h1></div><p id="updatedAt" class="muted"></p></div>
+      <section class="metric-grid">
+        <article><span>注册用户</span><b id="usersMetric">0</b><small>团队账号总数</small></article>
+        <article><span>累计作答</span><b id="answeredMetric">0</b><small>不含跳过题目</small></article>
+        <article><span>整体正确率</span><b id="accuracyMetric">0%</b><small>全部有效作答</small></article>
+        <article><span>近7日活跃</span><b id="activeMetric">0</b><small>有答题记录的用户</small></article>
+      </section>
+
+      <section class="panel registration-panel">
+        <div><p class="eyebrow">ACCESS CONTROL</p><h2>团队注册码</h2><p class="muted">新用户注册时必须填写，修改后立即生效。</p></div>
+        <form id="registrationForm"><input id="registrationCode" name="registrationCode" minlength="6" maxlength="64" required><button class="primary" type="submit">更新注册码</button></form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">MEMBERS</p><h2>用户与学习统计</h2></div><input id="userSearch" type="search" placeholder="搜索用户名或昵称"></div>
+        <div id="passwordResult" class="password-result hidden" role="status"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>用户</th><th>累计作答</th><th>正确率</th><th>错题</th><th>收藏</th><th>最后活跃</th><th>操作</th></tr></thead>
+            <tbody id="userRows"></tbody>
+          </table>
+        </div>
+        <p id="emptyUsers" class="empty hidden">暂无注册用户</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">TOPICS</p><h2>知识模块表现</h2></div></div>
+        <div id="topicStats" class="topic-grid"></div>
+      </section>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="admin.js?v=3.1"></script>
+</body>
+</html>

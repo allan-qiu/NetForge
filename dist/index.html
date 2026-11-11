@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="华为ICT实践赛网络赛道练题站，支持专项训练、随机刷题、错题本和本地进度统计。">
+  <title>华为ICT网络赛道练题站</title>
+  <link rel="stylesheet" href="styles.css?v=3.1">
+</head>
+<body class="auth-pending">
+  <div class="bg-grid" aria-hidden="true"></div>
+  <section id="authGate" class="auth-gate" aria-labelledby="authTitle">
+    <div class="auth-brand"><span class="brand-mark">N</span><strong>NetForge</strong></div>
+    <div class="auth-card">
+      <span class="eyebrow">MULTI USER TRAINING</span>
+      <h1 id="authTitle">登录你的训练空间</h1>
+      <p>每个账号独立保存学习进度、答题记录、收藏和错题本。</p>
+      <div class="auth-tabs" role="tablist">
+        <button id="loginTab" class="active" type="button">登录</button>
+        <button id="registerTab" type="button">注册</button>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <label>用户名<input name="username" autocomplete="username" minlength="3" maxlength="24" required></label>
+        <label>密码<input name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required></label>
+        <button class="primary-btn" type="submit">登录并继续训练</button>
+      </form>
+      <form id="registerForm" class="auth-form hidden">
+        <label>用户名<input name="username" autocomplete="username" minlength="3" maxlength="24" required></label>
+        <label>昵称<input name="displayName" autocomplete="nickname" maxlength="30" required></label>
+        <label>密码<input name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
+        <label>注册码<input name="registrationCode" autocomplete="off" required></label>
+        <button class="primary-btn" type="submit">创建独立账号</button>
+      </form>
+      <p id="authError" class="auth-error" role="alert"></p>
+      <a class="admin-entry" href="/admin.html">管理员后台 →</a>
+    </div>
+  </section>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="返回首页">
+      <span class="brand-mark">N</span>
+      <span><strong>NetForge</strong><small>华为ICT网络赛道</small></span>
+    </a>
+    <nav class="top-actions" aria-label="快捷操作">
+      <button class="ghost-btn" id="wrongBookBtn">错题本 <span id="wrongCountTop">0</span></button>
+      <button class="ghost-btn" id="favoriteBtn">收藏题 <span id="favoriteCountTop">0</span></button>
+      <button class="ghost-btn" id="historyBtn">答题记录</button>
+      <span class="user-name" id="userName">—</span>
+      <button class="ghost-btn logout-btn" id="logoutBtn">退出</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="homeView" class="view active">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">NETWORK TRACK TRAINING SYSTEM</span>
+          <h1>把每一次答错<br><em>变成下一次得分</em></h1>
+          <p>只保留网络赛道题目，覆盖路由交换、WLAN、网络安全、数据中心与基础协议。进度、收藏和错题自动保存在当前浏览器。</p>
+          <div class="hero-actions">
+            <button class="primary-btn" id="quickStartBtn">开始随机训练</button>
+            <button class="secondary-btn" id="continueBtn">继续上次进度</button>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <div class="radar" aria-hidden="true"><span></span><span></span><span></span><i></i></div>
+          <div class="panel-metric"><b id="questionTotal">—</b><span>可练题目</span></div>
+          <div class="panel-metric"><b id="accuracyMetric">0%</b><span>累计正确率</span></div>
+          <div class="panel-metric"><b id="answeredMetric">0</b><span>累计作答</span></div>
+        </div>
+      </div>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <div><span class="section-kicker">CUSTOM PRACTICE</span><h2>配置本轮训练</h2></div>
+          <p>建议先做20题摸底，再针对薄弱模块进行专项训练。</p>
+        </div>
+        <div class="config-grid">
+          <div class="config-card wide">
+            <label>知识模块</label>
+            <div class="chip-group" id="topicChips"></div>
+          </div>
+          <div class="config-card">
+            <label for="typeSelect">题型</label>
+            <select id="typeSelect">
+              <option value="all">全部题型</option>
+              <option value="single">单选题</option>
+              <option value="multiple">多选题</option>
+              <option value="judge">判断题</option>
+            </select>
+          </div>
+          <div class="config-card">
+            <label for="countSelect">本轮题量</label>
+            <select id="countSelect">
+              <option value="10">10题 · 快速热身</option>
+              <option value="20" selected>20题 · 标准训练</option>
+              <option value="50">50题 · 强化训练</option>
+              <option value="100">100题 · 模拟冲刺</option>
+            </select>
+          </div>
+          <button class="launch-card" id="customStartBtn"><span>生成训练</span><b>START →</b></button>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading compact">
+          <div><span class="section-kicker">PROGRESS</span><h2>训练概览</h2></div>
+          <button class="text-btn" id="syncBtn">刷新云端数据</button>
+        </div>
+        <div class="stats-grid">
+          <article><span>正确</span><b id="correctMetric">0</b><small>已掌握题目</small></article>
+          <article><span>错误</span><b id="wrongMetric">0</b><small>需要复习</small></article>
+          <article><span>收藏</span><b id="favoriteMetric">0</b><small>重点回看</small></article>
+          <article><span>今日</span><b id="todayMetric">0</b><small>今日作答</small></article>
+        </div>
+      </section>
+    </section>
+
+    <section id="quizView" class="view quiz-shell" aria-live="polite">
+      <div class="quiz-header">
+        <button class="icon-btn" id="exitQuizBtn" aria-label="退出训练">←</button>
+        <div class="quiz-progress-wrap">
+          <div class="quiz-meta"><span id="quizTopic">综合训练</span><b id="quizIndex">1 / 20</b></div>
+          <div class="progress-track"><span id="progressBar"></span></div>
+        </div>
+        <button class="icon-btn star" id="starBtn" aria-label="收藏本题">☆</button>
+      </div>
+
+      <article class="question-card">
+        <div class="question-labels"><span id="questionType">单选题</span><span id="reviewFlag" class="review-flag">答案待核验</span></div>
+        <h2 id="questionText"></h2>
+        <div id="optionsList" class="options-list"></div>
+        <p class="multi-tip" id="multiTip">多选题可能有两个或更多正确答案。</p>
+        <div id="feedbackPanel" class="feedback-panel">
+          <div class="feedback-title"><b id="feedbackTitle"></b><span id="correctAnswer"></span></div>
+          <p id="explanationText"></p>
+          <small id="sourceText"></small>
+        </div>
+        <div class="question-actions">
+          <button class="secondary-btn" id="skipBtn">暂时跳过</button>
+          <button class="primary-btn" id="submitBtn">确认答案</button>
+          <button class="primary-btn hidden" id="nextBtn">下一题</button>
+        </div>
+      </article>
+      <p class="keyboard-tip">快捷键：数字键选择 · Enter提交 · N下一题</p>
+    </section>
+
+    <section id="resultView" class="view result-shell">
+      <div class="result-card">
+        <span class="eyebrow">TRAINING COMPLETE</span>
+        <h1>本轮训练完成</h1>
+        <div class="score-ring"><b id="resultScore">0%</b><span>正确率</span></div>
+        <div class="result-numbers">
+          <div><b id="resultCorrect">0</b><span>正确</span></div>
+          <div><b id="resultWrong">0</b><span>错误</span></div>
+          <div><b id="resultSkipped">0</b><span>跳过</span></div>
+        </div>
+        <p id="resultMessage"></p>
+        <div class="result-actions">
+          <button class="primary-btn" id="retryWrongBtn">重练本轮错题</button>
+          <button class="secondary-btn" id="backHomeBtn">返回首页</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="collectionView" class="view collection-shell">
+      <div class="collection-header">
+        <button class="icon-btn" id="exitCollectionBtn" aria-label="返回首页">←</button>
+        <div><span class="section-kicker">REVIEW</span><h1 id="collectionTitle">错题本</h1></div>
+      </div>
+      <div id="collectionList" class="collection-list"></div>
+      <div id="emptyCollection" class="empty-state"><b>这里还是空的</b><p>继续训练后，相关题目会自动出现在这里。</p></div>
+    </section>
+  </main>
+
+  <footer><span>NetForge · 网络赛道训练</span><span>题库来自用户提供资料，存疑题请以官方教材为准</span></footer>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js?v=3.1"></script>
+</body>
+</html>
