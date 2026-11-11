@@ -45,17 +45,3 @@ Node.js 只用于前端测试。接口细节见 [V2_API_CONTRACT.md](V2_API_CONT
 ## Ubuntu 部署
 
 在计划用于此应用的 Ubuntu 24.04 服务器上，从项目目录运行 `sudo bash deploy/install.sh`。脚本配置 Nginx 和 systemd，使用 `/var/lib/netforge` 保存数据，升级前会备份并验证已有数据库。首次安装生成的管理员配置和注册码保存在 `/etc/netforge.env`。公网使用时，先配置域名和 HTTPS，再在环境文件中启用 `NETFORGE_COOKIE_SECURE=1`。
-
-## 上传 GitHub
-
-在 GitHub 创建一个空仓库，解压源码包，在包含本 README 的目录运行下面的命令。把仓库地址替换成实际地址。
-
-```bash
-git init -b main
-git add .
-git commit -m "Initial import of NetForge v2.4.0"
-git remote add origin https://github.com/YOUR_ACCOUNT/YOUR_REPO.git
-git push -u origin main
-```
-
-发布前请确认你拥有所上传源码和题目的发布权。若希望授予他人复制或修改源码的权利，请根据权属选择并添加许可证。
